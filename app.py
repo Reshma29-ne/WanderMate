@@ -25,11 +25,14 @@ from html import escape
 
 def get_db_connection():
     return mysql.connector.connect(
-        host="localhost",
-        user="root",
-        password=os.environ.get("WANDERMATE_DB_PASSWORD"),
-        database="WanderMate"
-    )
+host=os.environ.get("DB_HOST"),
+port=int(os.environ.get("DB_PORT", "3306")),
+user=os.environ.get("DB_USER"),
+password=os.environ.get("DB_PASSWORD"),
+database=os.environ.get("DB_NAME"),
+ssl_disabled=False
+)
+
 
 
 @app.route("/")
@@ -538,9 +541,10 @@ def destinations():
         wishlist_items = cursor.fetchall()
 
         return render_template(
-            "destinations.html",
-            visited_places=visited_places
-        )
+    "destinations.html",
+    visited_places=visited_places,
+    wishlist_items=wishlist_items
+)
 
     except Exception:
         app.logger.exception("Could not load visited destinations.")

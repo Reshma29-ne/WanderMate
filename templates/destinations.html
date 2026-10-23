@@ -1,0 +1,403 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Explore Destinations | WanderMate</title>
+
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: #f2f7f0;
+            margin: 0;
+            padding: 30px;
+            color: #294435;
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 35px;
+        }
+
+        .destinations {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 20px;
+            max-width: 1000px;
+            margin: auto;
+        }
+                #travel-map {
+            width: 100%;
+            height: 420px;
+            max-width: 1000px;
+            margin: 30px auto;
+            border-radius: 18px;
+            border: 1px solid #dce5da;
+            box-shadow: 0 8px 24px rgba(48, 67, 65, 0.10);
+            z-index: 1;
+        }
+        .visited-leaf-marker {
+    background: #edf5e9;
+    border: 1px solid #b7d1b0;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 3px 8px rgba(48, 67, 65, 0.18);
+}
+
+.visited-leaf-marker span {
+    font-size: 21px;
+    line-height: 1;
+}
+/* Aesthetic Travel Wishlist */
+.wishlist-section {
+    max-width: 950px;
+    margin: 45px auto;
+    padding: 45px 25px;
+    background: #fffdf7;
+    border: 1px solid #e4e9dc;
+    border-radius: 24px;
+    box-shadow: 0 8px 30px rgba(48, 67, 65, 0.07);
+}
+
+.wishlist-heading {
+    text-align: center;
+    margin-bottom: 35px;
+}
+
+.wishlist-eyebrow {
+    font-size: 11px;
+    letter-spacing: 3px;
+    color: #8a9f85;
+    font-weight: bold;
+}
+
+.wishlist-heading h2 {
+    font-family: Georgia, serif;
+    font-size: 30px;
+    color: #3c624c;
+    margin: 15px 0;
+    font-weight: normal;
+}
+
+.wishlist-heading p {
+    color: #849184;
+    font-size: 14px;
+    line-height: 1.7;
+}
+
+.wishlist-empty {
+    background: #f5f8f0;
+    border: 1px dashed #cbdcc5;
+    border-radius: 18px;
+    padding: 35px 20px;
+    text-align: center;
+}
+
+.wishlist-empty-icon {
+    font-size: 30px;
+    display: block;
+    margin-bottom: 12px;
+}
+
+.wishlist-empty h3 {
+    font-family: Georgia, serif;
+    color: #4d755b;
+    font-size: 21px;
+    font-weight: normal;
+}
+
+.wishlist-empty p {
+    color: #8b998b;
+    font-size: 13px;
+}
+/* Wishlist Form Styling */
+.wishlist-form {
+    background: #f8faf5;
+    border: 1px solid #e1e9dc;
+    border-radius: 18px;
+    padding: 28px;
+    margin-bottom: 30px;
+}
+
+.wishlist-field {
+    margin-bottom: 20px;
+}
+
+.wishlist-field label {
+    display: block;
+    font-size: 13px;
+    font-weight: 600;
+    color: #4d755b;
+    margin-bottom: 9px;
+}
+
+.wishlist-field input,
+.wishlist-field textarea {
+    width: 100%;
+    padding: 13px 15px;
+    border: 1px solid #d5e1d0;
+    border-radius: 12px;
+    background: #fffefa;
+    color: #294435;
+    font-family: Arial, sans-serif;
+    font-size: 14px;
+    box-sizing: border-box;
+    outline: none;
+    transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+.wishlist-field input:focus,
+.wishlist-field textarea:focus {
+    border-color: #87ae8b;
+    box-shadow: 0 0 0 3px rgba(135, 174, 139, 0.15);
+}
+
+.wishlist-field textarea {
+    resize: vertical;
+}
+
+.wishlist-add-btn {
+    background: #668c70;
+    color: white;
+    border: none;
+    border-radius: 12px;
+    padding: 14px 25px;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 0.2s, transform 0.2s;
+}
+
+.wishlist-add-btn:hover {
+    background: #4d755b;
+    transform: translateY(-2px);
+}
+        .card {
+            background: white;
+            padding: 25px;
+            border-radius: 15px;
+            text-align: center;
+            box-shadow: 0 4px 12px #00000010;
+        }
+
+        .card h2 {
+            color: #387653;
+        }
+
+        .back {
+            display: inline-block;
+            margin-top: 25px;
+            color: #387653;
+            text-decoration: none;
+            font-weight: bold;
+        }
+    </style>
+</head>
+
+<body>
+    <header>
+        <h1>🌿 Explore Destinations</h1>
+        <p>Discover beautiful places for your next adventure.</p>
+    </header>
+<script id="visited-places-data" type="application/json">
+    {{ visited_places | tojson }}
+</script>
+    <div id="travel-map"></div>
+  
+<!-- Travel Wishlist -->
+<section class="wishlist-section">
+    <div class="wishlist-heading">
+        <span class="wishlist-eyebrow">YOUR NEXT ADVENTURE</span>
+        <h2>♡ Places I Dream of Visiting</h2>
+        <p>Little dreams, beautiful destinations, and adventures yet to come.</p>
+    </div>
+<!-- Add a Dream Destination -->
+<form class="wishlist-form" id="wishlist-form"
+      method="POST"
+      action="{{ url_for('destinations') }}">
+    <div class="wishlist-field">
+        <label for="wishlist-place">📍 Dream Destination</label>
+        <input
+            type="text"
+            id="wishlist-place"
+            name="place"
+            placeholder="e.g. Kashmir, Paris, Bali..."
+            maxlength="100"
+            required
+        >
+    </div>
+
+    <div class="wishlist-field">
+        <label for="wishlist-date">📅 Planned Travel Date</label>
+        <input
+            type="date"
+            id="wishlist-date"
+            name="planned_date"
+            required
+        >
+    </div>
+
+    <div class="wishlist-field">
+        <label for="wishlist-note">💌 A Little Note</label>
+        <textarea
+            id="wishlist-note"
+            name="note"
+            rows="3"
+            maxlength="500"
+            placeholder="A little dream I want to make come true..."
+        ></textarea>
+    </div>
+
+    <button type="submit" class="wishlist-add-btn">
+        ♡ Add to My Wishlist
+    </button>
+</form>
+<!-- Saved Wishlist Destinations -->
+{% if wishlist_items %}
+<div class="wishlist-cards">
+
+    {% for item in wishlist_items %}
+    <div class="wishlist-card">
+
+        <h3>♡ {{ item.destination_name }}</h3>
+
+        <p>
+            📅 Planned:
+            {{ item.planned_date.strftime('%d %B %Y') }}
+        </p>
+
+        <p class="wishlist-note">
+            💌 {{ item.personal_note or 'A little adventure awaits...' }}
+        </p>
+
+    </div>
+    {% endfor %}
+
+</div>
+{% endif %}
+    <div class="wishlist-empty">
+        <span class="wishlist-empty-icon">🌿</span>
+        <h3>Your next adventure starts here</h3>
+        <p>Add the places you dream of exploring, one destination at a time.</p>
+    </div>
+</section>
+
+
+    
+    <section class="destinations">
+        <div class="card">
+            <h2>🏔️ Mountains</h2>
+            <p>Discover peaceful mountain views and scenic trails.</p>
+        </div>
+
+        <div class="card">
+            <h2>💧 Waterfalls</h2>
+            <p>Explore refreshing waterfalls surrounded by nature.</p>
+        </div>
+
+        <div class="card">
+            <h2>🏕️ Camping</h2>
+            <p>Enjoy outdoor adventures under the open sky.</p>
+        </div>
+
+        <div class="card">
+            <h2>🌳 Forests</h2>
+            <p>Experience the beauty of forests and wildlife.</p>
+        </div>
+    </section>
+
+    <div style="text-align: center;">
+        <a class="back" href="{{ url_for('diary') }}">← Back to Travel Diary</a>
+        
+    </div>
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <script>
+    // Create the interactive map
+    const map = L.map('travel-map').setView([20.5937, 78.9629], 4.5);
+
+    // Display the map tiles
+    L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        attribution: '&copy; OpenStreetMap contributors'
+    }).addTo(map);
+
+// Get destinations from the logged-in user's travel diary.
+const visitedPlaces = JSON.parse('{{ visited_places | tojson | safe }}');
+
+async function addVisitedMarkers() {
+    const markerBounds = [];
+
+    for (const place of visitedPlaces) {
+        try {
+            const query = place.location &&
+                place.location.toLowerCase() !== place.name.toLowerCase()
+                ? `${place.name}, ${place.location}`
+                : place.name;
+
+            const response = await fetch(
+                'https://nominatim.openstreetmap.org/search?format=jsonv2&limit=1&q=' +
+                encodeURIComponent(query)
+            );
+
+            if (!response.ok) {
+                console.warn('Could not locate:', place.name);
+                continue;
+            }
+
+            const results = await response.json();
+
+            if (results.length === 0) {
+                console.warn('No coordinates found for:', place.name);
+                continue;
+            }
+
+            const latitude = Number(results[0].lat);
+            const longitude = Number(results[0].lon);
+
+            const leafIcon = L.divIcon({
+            className: 'visited-leaf-marker',
+            html: '<span>🌿</span>',
+            iconSize: [36, 36],
+            iconAnchor: [18, 18],
+            popupAnchor: [0, -18]
+        });
+
+        L.marker([latitude, longitude], {
+            icon: leafIcon
+        })
+        .addTo(map)
+
+
+            .bindPopup(
+                '<strong>🌿 ' + place.name + '</strong><br>' +
+                'Visited: ' + place.visit_date
+            );
+
+            markerBounds.push([latitude, longitude]);
+
+        } catch (error) {
+            console.error('Could not add marker for ' + place.name, error);
+        }
+
+        // Wait before looking up the next destination.
+        await new Promise(resolve => setTimeout(resolve, 1100));
+    }
+
+    if (markerBounds.length > 0) {
+        map.fitBounds(markerBounds, {
+            padding: [35, 35],
+            maxZoom: 10
+        });
+    }
+}
+
+addVisitedMarkers();
+
+
+   </script>
+</body>
+</html>
+

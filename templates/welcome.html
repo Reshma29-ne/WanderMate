@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Welcome to WanderMate</title>
+
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Playfair+Display:wght@400;500;600;700&display=swap"
+          rel="stylesheet">
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            min-height: 100vh;
+            font-family: 'DM Sans', sans-serif;
+            color: #fff;
+            background:
+                linear-gradient(
+                    180deg,
+                    rgba(19, 54, 72, 0.18),
+                    rgba(20, 48, 65, 0.60)
+                ),
+                url("https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=2000&q=85");
+
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+        }
+
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 26px 7%;
+        }
+
+        .logo {
+            font-family: 'Playfair Display', serif;
+            font-size: 30px;
+            font-weight: 700;
+            letter-spacing: 0.5px;
+        }
+
+        .logo span {
+            color: #f7d9b4;
+        }
+
+        .nav-link {
+            color: white;
+            text-decoration: none;
+            font-size: 14px;
+            margin-left: 24px;
+            transition: opacity 0.3s;
+        }
+
+        .nav-link:hover {
+            opacity: 0.7;
+        }
+
+        .hero {
+            min-height: 78vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            padding: 40px 20px 100px;
+        }
+
+        .eyebrow {
+            font-size: 12px;
+            letter-spacing: 4px;
+            text-transform: uppercase;
+            color: #ffe5c7;
+            margin-bottom: 24px;
+        }
+
+        h1 {
+            font-family: 'Playfair Display', serif;
+            font-size: clamp(42px, 7vw, 78px);
+            font-weight: 500;
+            line-height: 1.15;
+            max-width: 850px;
+            margin-bottom: 20px;
+            text-shadow: 0 3px 25px rgba(0, 0, 0, 0.15);
+        }
+
+        h1 span {
+            color: #ffe1bd;
+            font-style: italic;
+        }
+
+        .subtitle {
+            font-size: 17px;
+            line-height: 1.8;
+            max-width: 540px;
+            color: #f7f4f0;
+            margin-bottom: 36px;
+        }
+
+        .buttons {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 16px;
+        }
+
+        .button {
+            display: inline-block;
+            padding: 15px 30px;
+            border-radius: 30px;
+            text-decoration: none;
+            font-size: 14px;
+            font-weight: 700;
+            transition: transform 0.25s, background 0.25s;
+        }
+
+        .button:hover {
+            transform: translateY(-3px);
+        }
+
+        .signup {
+            background: #f5d8ba;
+            color: #354a50;
+            border: 1px solid #f5d8ba;
+        }
+
+        .signup:hover {
+            background: #ffe8d2;
+        }
+
+        .login {
+            color: white;
+            border: 1px solid rgba(255, 255, 255, 0.8);
+            background: rgba(255, 255, 255, 0.10);
+            backdrop-filter: blur(8px);
+        }
+
+        .login:hover {
+            background: rgba(255, 255, 255, 0.22);
+        }
+
+        .note {
+            margin-top: 30px;
+            font-size: 13px;
+            color: #f5eee7;
+        }
+
+        footer {
+            text-align: center;
+            padding: 20px;
+            font-size: 12px;
+            color: #f4ece5;
+            background: rgba(20, 40, 50, 0.12);
+        }
+
+        @media (max-width: 600px) {
+            header {
+                padding: 22px 6%;
+            }
+
+            .logo {
+                font-size: 25px;
+            }
+
+            .nav-link {
+                margin-left: 10px;
+                font-size: 12px;
+            }
+
+            .hero {
+                min-height: 78vh;
+                padding-bottom: 60px;
+            }
+
+            .subtitle {
+                font-size: 15px;
+            }
+
+            .button {
+                padding: 14px 24px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <header>
+        <div class="logo">Wander<span>Mate</span> 🌿</div>
+
+        <nav>
+            <a class="nav-link" href="{{ url_for('login') }}">Log In</a>
+            <a class="nav-link" href="{{ url_for('register') }}">Sign Up</a>
+        </nav>
+    </header>
+
+    <main class="hero">
+
+        <p class="eyebrow">✦ Your journey, your story ✦</p>
+
+        <h1>
+            Welcome to<br>
+            <span>WanderMate</span>
+        </h1>
+
+        <p class="subtitle">
+            Every journey deserves to be remembered.
+            Collect your favourite places, preserve your travel
+            stories, and turn beautiful moments into memories
+            that last forever.
+        </p>
+
+        <div class="buttons">
+            <a class="button signup"
+               href="{{ url_for('register') }}">
+                New to WanderMate? Sign Up
+            </a>
+
+            <a class="button login"
+               href="{{ url_for('login') }}">
+                Already registered? Log In
+            </a>
+        </div>
+
+        <p class="note">
+            🌊 Discover places. ✨ Capture moments. 🦋 Keep memories.
+        </p>
+
+    </main>
+
+    <footer>
+        Made for the places you go and the memories you bring back. ♡
+    </footer>
+
+</body>
+</html>

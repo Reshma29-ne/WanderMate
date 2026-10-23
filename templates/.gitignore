@@ -1,0 +1,25 @@
+# Private environment variables
+.env
+.env.*
+
+# Python temporary files
+__pycache__/
+*.pyc
+
+# Virtual environment
+venv/
+.venv/
+
+# Uploaded travel photos
+static/uploads/
+
+# Local database files
+*.db
+*.sqlite3
+
+# Editor settings
+.vscode/
+# Backup Python files
+app_backup.py
+app.copy.py
+app_before_recovery.py

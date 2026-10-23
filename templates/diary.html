@@ -1,0 +1,605 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>My Travel Diary | WanderMate</title>
+
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Playfair+Display:wght@400;500;600;700&display=swap"
+          rel="stylesheet">
+
+
+    <style>
+        .logout-btn {
+    display: inline-block;
+    background-color: #d9534f;
+    color: white;
+    padding: 10px 20px;
+    border-radius: 8px;
+    text-decoration: none;
+    font-weight: bold;
+    margin: 15px;
+}
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'DM Sans', sans-serif;
+            background: #f6f4ee;
+            color: #344c50;
+        }
+
+        header {
+            min-height: 75px;
+            padding: 18px 7%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 15px;
+            background: #fffdf8;
+            border-bottom: 1px solid #e8e6dc;
+        }
+
+        .logo {
+            font-family: 'Playfair Display', serif;
+            font-size: 28px;
+            font-weight: 700;
+            color: #365a61;
+        }
+
+        .logo span {
+            color: #d99e7d;
+        }
+
+        nav {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 22px;
+        }
+
+        nav a {
+            color: #52686a;
+            text-decoration: none;
+            font-size: 14px;
+        }
+
+        nav a:hover {
+            color: #c78364;
+        }
+
+        .hero {
+            min-height: 310px;
+            padding: 65px 20px;
+            text-align: center;
+            color: white;
+            background:
+                linear-gradient(
+                    rgba(34, 69, 76, 0.45),
+                    rgba(34, 69, 76, 0.62)
+                ),
+                url("https://images.unsplash.com/photo-1473116763249-2faaef81ccda?auto=format&fit=crop&w=1800&q=85")
+                center/cover;
+        }
+
+        .hero p {
+            font-size: 12px;
+            letter-spacing: 4px;
+            text-transform: uppercase;
+            margin-bottom: 18px;
+            color: #f7ddc5;
+        }
+
+        .hero h1 {
+            font-family: 'Playfair Display', serif;
+            font-size: clamp(36px, 6vw, 58px);
+            font-weight: 500;
+            margin-bottom: 15px;
+        }
+
+        .hero .subtitle {
+            font-size: 15px;
+            letter-spacing: 0;
+            text-transform: none;
+            line-height: 1.8;
+            color: #fffaf5;
+        }
+
+        .container {
+            width: min(1100px, 90%);
+            margin: 45px auto;
+        }
+
+        .section-heading {
+            margin-bottom: 24px;
+        }
+
+        .section-heading h2 {
+            font-family: 'Playfair Display', serif;
+            font-size: 32px;
+            font-weight: 500;
+            margin-bottom: 8px;
+        }
+
+        .section-heading p {
+            color: #788686;
+            font-size: 14px;
+            line-height: 1.7;
+        }
+
+        .memory-form {
+            background: #fffdf9;
+            padding: 30px;
+            border: 1px solid #e9e5da;
+            border-radius: 18px;
+            box-shadow: 0 10px 35px rgba(49, 71, 67, 0.05);
+        }
+
+        .form-grid {
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 22px;
+        }
+
+        .field {
+            display: flex;
+            flex-direction: column;
+            gap: 9px;
+        }
+
+        .field.full {
+            grid-column: 1 / -1;
+        }
+
+        label {
+            font-size: 13px;
+            font-weight: 700;
+            color: #52686a;
+        }
+
+        input, textarea {
+            width: 100%;
+            padding: 13px 14px;
+            border: 1px solid #dedfd5;
+            border-radius: 10px;
+            background: #fffefa;
+            color: #344c50;
+            font: inherit;
+            font-size: 14px;
+        }
+
+        input:focus, textarea:focus {
+            outline: 2px solid #d6e6df;
+            border-color: #91b7aa;
+        }
+
+        textarea {
+            min-height: 140px;
+            resize: vertical;
+            line-height: 1.7;
+        }
+
+        input[type="file"] {
+            background: #f8f7f0;
+        }
+
+        .hint {
+            font-size: 12px;
+            color: #87918b;
+        }
+
+        .save-button {
+            margin-top: 25px;
+            padding: 14px 25px;
+            border: none;
+            border-radius: 30px;
+            background: #557c78;
+            color: white;
+            font: inherit;
+            font-weight: 700;
+            cursor: pointer;
+        }
+
+        .save-button:hover {
+            background: #3e6561;
+        }
+
+        .memories-heading {
+            margin-top: 60px;
+        }
+
+        .empty-state {
+            padding: 40px 20px;
+            text-align: center;
+            background: #fffdf9;
+            border: 1px dashed #d7d9ce;
+            border-radius: 18px;
+        }
+
+        .empty-state .icon {
+            font-size: 42px;
+            margin-bottom: 12px;
+        }
+
+        .empty-state h3 {
+            font-family: 'Playfair Display', serif;
+            font-size: 23px;
+            margin-bottom: 10px;
+        }
+
+        .empty-state p {
+            font-size: 14px;
+            line-height: 1.8;
+            color: #788686;
+        }
+        /* Pinterest-inspired scrapbook memories */
+
+.memories-grid {
+display: grid;
+grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+gap: 35px;
+margin: 30px 0 55px;
+align-items: start;
+}
+
+
+.memory-card {
+    position: relative;
+    padding: 15px 15px 24px;
+    background: #fffdf8;
+    border: 1px solid #eee5d9;
+    border-radius: 16px;
+    box-shadow: 0 8px 24px rgba(48, 67, 65, 0.08);
+    transform: rotate(-1deg);
+    transition: transform 0.25s ease, box-shadow 0.25s ease;
+}
+
+.memory-card:nth-child(even) {
+    transform: rotate(1.2deg);
+}
+
+.memory-card:hover {
+    transform: translateY(-7px) rotate(0deg);
+    box-shadow: 0 16px 35px rgba(48, 67, 65, 0.13);
+}
+
+.memory-photo {
+    width: 100%;
+    height: 245px;
+    object-fit: cover;
+    display: block;
+    margin-bottom: 17px;
+    background: #e9eee8;
+    border-radius: 11px;
+    transition: transform 0.35s ease;
+}
+
+.memory-card:hover .memory-photo {
+    transform: scale(1.02);
+}
+
+.memory-no-photo {
+    min-height: 180px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 17px;
+    background: linear-gradient(135deg, #e4eee8, #f8e9dc);
+    border-radius: 11px;
+    font-size: 46px;
+}
+
+.memory-date {
+    display: inline-block;
+    padding: 6px 11px;
+    background: #f4eee5;
+    border-radius: 20px;
+    color: #a56f53;
+    font-size: 11px;
+    letter-spacing: 0.5px;
+    margin: 8px 0 15px;
+}
+
+.memory-title {
+    color: #365a61;
+    font-family: 'Playfair Display', serif;
+    font-size: 24px;
+    font-weight: 500;
+    line-height: 1.4;
+    margin-bottom: 5px;
+    overflow-wrap: anywhere;
+}
+
+.memory-experience {
+    color: #667572;
+    font-size: 14px;
+    line-height: 1.9;
+    white-space: pre-wrap;
+    overflow-wrap: anywhere;
+    margin-top: 4px;
+}
+
+.memory-place {
+    margin-top: 18px;
+    padding-top: 14px;
+    border-top: 1px solid #eee5d9;
+    color: #71816f;
+    font-size: 12px;
+    line-height: 1.8;
+    overflow-wrap: anywhere;
+}
+
+.memory-caption {
+margin-top: 13px;
+color: #bd795a;
+text-align: center;
+font-family: 'Playfair Display', serif;
+font-size: 15px;
+font-style: italic;
+}
+
+.delete-memory-btn {
+display: block;
+margin: 12px auto 5px;
+padding: 9px 18px;
+border: 1px solid #e7b9aa;
+border-radius: 25px;
+background: #fff4f0;
+color: #b85f52;
+font-family: 'DM Sans', sans-serif;
+font-size: 13px;
+cursor: pointer;
+transition: all 0.3s ease;
+}
+
+.delete-memory-btn:hover {
+background: #b85f52;
+color: white;
+transform: translateY(-2px);
+}
+
+
+
+@media (max-width: 650px) {
+    .memories-grid {
+        grid-template-columns: 1fr;
+        gap: 25px;
+        padding: 0 8px;
+    }
+
+    .memory-card,
+    .memory-card:nth-child(even) {
+        transform: rotate(0deg);
+    }
+
+    .memory-photo {
+        height: 260px;
+    }
+}
+
+        footer {
+            padding: 28px 15px;
+            text-align: center;
+            background: #eaece4;
+            color: #657875;
+            font-size: 12px;
+        }
+
+        @media (max-width: 650px) {
+            header {
+                padding: 18px 5%;
+            }
+
+            .form-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .field.full {
+                grid-column: auto;
+            }
+
+            .memory-form {
+                padding: 22px 17px;
+            }
+
+            .hero {
+                padding: 55px 20px;
+            }
+
+            nav {
+                gap: 14px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+<header>
+    <div class="logo">Wander<span>Mate</span> 🌿</div>
+
+    <nav>
+        <a href="{{ url_for('home') }}">Home</a>
+        <a href="{{ url_for('diary') }}">My Diary</a>
+        <a href="{{ url_for('login') }}">Login</a>
+    </nav>
+</header>
+
+<section class="hero">
+    <p>✦ Your journey, your story ✦</p>
+
+    <h1>My Travel Diary</h1>
+    <a href="{{ url_for('logout') }}" class="logout-btn">Logout</a>
+
+    <div class="subtitle">
+        Every place holds a story. Every journey leaves a memory.<br>
+        Keep your favourite moments here. 🌅
+    </div>
+</section>
+
+<main class="container">
+
+    <section>
+        <div class="section-heading">
+            <h2>✍️ Create a New Memory</h2>
+            <p>Save the places you visit, the experiences you love,
+                and the photographs you never want to forget.</p>
+        </div>
+
+        <form class="memory-form"
+              action="{{ url_for('diary') }}"
+              method="POST"
+              enctype="multipart/form-data">
+
+            <div class="form-grid">
+
+                <div class="field">
+                    <label for="place">📍 Place Name</label>
+                    <input
+                        type="text"
+                        id="place"
+                        name="place"
+                        placeholder="e.g. Goa Beach"
+                        required>
+                </div>
+
+                <div class="field">
+                    <label for="travel_date">📅 Date of Visit</label>
+                    <input
+                        type="date"
+                        id="travel_date"
+                        name="travel_date"
+                        required>
+                </div>
+
+                <div class="field full">
+                    <label for="experience">💌 Your Experience</label>
+                    <textarea
+                        id="experience"
+                        name="experience"
+                        placeholder="Write about your favourite moments, the beautiful views, and everything you want to remember..."
+                        required></textarea>
+                </div>
+
+                <div class="field full">
+                    <label for="photos">📸 Upload Your Travel Photos</label>
+                    <input
+                        type="file"
+                        id="photos"
+                        name="photos"
+                        accept="image/jpeg,image/png,image/webp"
+                        multiple>
+                    <span class="hint">
+                        You can select multiple photos. Your favourite moments, all in one place. You can select multiple photos.
+                    </span>
+                </div>
+
+            </div>
+
+            <button class="save-button" type="submit">
+                ♡ Save My Memory
+            </button>
+
+        </form>
+    </section>
+
+<section class="memories-heading">
+
+    <div class="section-heading">
+        <h2>🌷 My Beautiful Memories</h2>
+        <p>Your adventures, collected like little pages in a scrapbook.</p>
+    </div>
+
+    {% with messages = get_flashed_messages() %}
+        {% if messages %}
+            {% for message in messages %}
+                <p style="text-align:center; padding:12px; margin-bottom:15px; color:#345b40; background:#e7f4e4; border-radius:10px;">
+                    {{ message }}
+                </p>
+            {% endfor %}
+        {% endif %}
+    {% endwith %}
+
+    {% if trips %}
+        <div class="memories-grid">
+
+            {% for trip in trips %}
+                <article class="memory-card">
+
+                    {% if trip.photos %}
+                        {% for photo in trip.photos %}
+                            <img
+                                class="memory-photo"
+                                src="{{ url_for('static', filename=photo.photo_path) }}"
+                                alt="Photo from {{ trip.destination }}"
+                                loading="lazy">
+                        {% endfor %}
+                    {% else %}
+                        <div class="memory-no-photo">🌊 🌷</div>
+                    {% endif %}
+
+                    <h3 class="memory-title">
+                        📍 {{ trip.destination }}
+                    </h3>
+
+                    <p class="memory-date">
+                        ♡ {{ trip.start_date }}
+                    </p>
+
+                    {% if trip.adventure_experience or trip.personal_memories %}
+                        <p class="memory-experience">{{ trip.adventure_experience or trip.personal_memories }}</p>
+                    {% endif %}
+
+                    {% if trip.places_visited %}
+                        <p class="memory-place">
+                            Places visited: {{ trip.places_visited }}
+                        </p>
+                    {% endif %}
+
+                    <p class="memory-caption">
+                        A little piece of my journey ♡
+                    </p>
+                    <form method="POST"
+      action="{{ url_for('delete_memory', trip_id=trip.trip_id) }}"
+      onsubmit="return confirm('Are you sure you want to delete this memory?');">
+    <button type="submit" class="delete-memory-btn">
+        🗑️ Delete Memory
+    </button>
+</form>
+
+                </article>
+            {% endfor %}
+
+        </div>
+    {% else %}
+        <div class="empty-state">
+            <div class="icon">🌊 📔 🦋</div>
+            <h3>Your next adventure belongs here</h3>
+            <p>
+                Your saved travel memories will appear here.<br>
+                Let's fill these pages with wonderful journeys!
+            </p>
+        </div>
+    {% endif %}
+
+</section>
+
+
+    
+        
+
+           
+       
+
+</main>
+
+<footer>
+    WanderMate ♡ Made for the places you go and the memories you bring back.
+</footer>
+
+</body>
+</html>
